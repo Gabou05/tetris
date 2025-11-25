@@ -2,8 +2,6 @@
 #include <time.h>
 
 #define LENGTH 10
-#define X_ORIGIN 5
-#define Y_ORIGIN 5
 
 void display(int tab[LENGTH][LENGTH]){
     int i,j;
@@ -15,17 +13,17 @@ void display(int tab[LENGTH][LENGTH]){
     }
 }
 
-void rotation_unite(int tab[LENGTH][LENGTH],int x, int y, int rotation){
+void rotation_unite(int tab[LENGTH][LENGTH],int x, int y, int rotation,int origin_x,int origin_y){
     tab[x][y] = 0;
     switch(rotation){
         case 1 :
-            tab[x + 2* (X_ORIGIN - x) - 1][y] = 1;
+            tab[x + 2* (origin_x - x) - 1][y] = 1;
             break;
         case 2 :
-            tab[x + 2*(X_ORIGIN - x) - 1][y + 2 *(X_ORIGIN - y) - 1] = 1;
+            tab[x + 2*(origin_x - x) - 1][y + 2 *(origin_y - y) - 1] = 1;
             break;
         case 3 :
-            tab[x][y + 2*(Y_ORIGIN - y) - 1] = 1;
+            tab[x][y + 2*(origin_y - y) - 1] = 1;
             break;
         default:
             tab[x][y] = 1;
@@ -33,7 +31,7 @@ void rotation_unite(int tab[LENGTH][LENGTH],int x, int y, int rotation){
     }
 }
 
-void rotation(int tab[LENGTH][LENGTH], int rotation){
+void rotation(int tab[LENGTH][LENGTH], int rotation,int origin_x,int origin_y){
     /* Récup le pattern à rotate */ 
     int tmp[LENGTH][LENGTH];
     int i;
@@ -47,7 +45,7 @@ void rotation(int tab[LENGTH][LENGTH], int rotation){
         for(j=0; j < LENGTH;j ++){
             if(tmp[i][j] == 1){
                 tab[i][j] = 0;
-                rotation_unite(tab,i,j,rotation);
+                rotation_unite(tab,i,j,rotation,origin_x,origin_y);
             }
         }
     }
@@ -71,7 +69,7 @@ int main(){
     printf("3- 270°\n");
     scanf(" %d",&choice);
     printf("\n");
-    rotation(tab,choice);
+    rotation(tab,choice,5,5);
     display(tab);
     return 0;
 }

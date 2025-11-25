@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <ncurses.h>
+#include "rotation.h"
 
 #define GRID_ROW 20
 #define GRID_COLUMN 10
@@ -14,6 +15,7 @@ typedef struct square{
 
 typedef struct block{
     square archi[5];
+    square pivot;
     int nb_square;
 }block;
 
@@ -32,13 +34,13 @@ void init(){
     square q6 = {{1,5}};
     square q7 = {{1,6}};
     
-    block I = {{q0,q1,q2,q3},4};
-    block J = {{q0,q5,q6,q7},4};
-    block L = {{q5,q6,q7,q2},4};
-    block O = {{q0,q1,q5,q6},4};
-    block S = {{q5,q6,q1,q2},4};
-    block T = {{q5,q6,q7,q1},4};
-    block Z = {{q0,q1,q6,q7},4};
+    block I = {{q0,q1,q2,q3},q2,4};
+    block J = {{q0,q5,q6,q7},q6,4};
+    block L = {{q5,q6,q7,q2},q6,4};
+    block O = {{q0,q1,q5,q6},q1,4};
+    block S = {{q5,q6,q1,q2},q6,4};
+    block T = {{q5,q6,q7,q1},q6,4};
+    block Z = {{q0,q1,q6,q7},q6,4};
     
     block_list[0] = I;
     block_list[1] = J;
@@ -135,7 +137,11 @@ void move_block(block b, int depl){
 }
 
 void rotate_90(block b){
-
+    int i;
+    for(i = 0; i < b.nb_square;i++){
+        square * ptr = &b.archi[i];
+        rotation(ptr,1,b.pivot.coordinates[0],b.pivot.coordinates[1]);
+    }
 }
 
 void play_block(block b){
@@ -148,7 +154,6 @@ void play_block(block b){
         case KEY_LEFT:
             move_block(b,-1);
         default:
-
     }
 }
 
